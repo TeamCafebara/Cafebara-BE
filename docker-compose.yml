@@ -1,0 +1,30 @@
+version: '3'
+
+services:
+
+  mysql:
+    image: mysql/mysql-server:8.0
+    container_name: cafebara-mysql
+    environment:
+      TZ: 'Asia/Seoul'
+      MYSQL_ROOT_HOST: '%'
+      MYSQL_USER: "cafebara"
+      MYSQL_PASSWORD: "cafebara"
+      MYSQL_DATABASE: "cafebara"
+    ports:
+      - "3307:3306" # loacl에 설치된 MySQL과 conflict되지 않도록 호스트 포트 다르게 설정
+    command:
+      - "mysqld"
+      - "--character-set-server=utf8mb4"
+      - "--collation-server=utf8mb4_unicode_ci"
+
+  redis:
+    image: redis:alpine
+    container_name: cafebara-redis
+    hostname: redis_boot
+    labels:
+      - "name=redis"
+      - "mode=standalone"
+    ports:
+      - 6378:6379 # loacl에 설치된 Redis와 conflict되지 않도록 호스트 포트 다르게 설정
+    command: redis-server --port 6379
